@@ -1,240 +1,316 @@
-/* App.css - FINAL FIX */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+/* App.css - VERSI SAFE MODE (STABIL) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
 :root {
-  --bg-cream: #FFF8E7;
-  --navy: #102C44;
-  --navy-light: #1a3c5a;
-  --blue-highlight: #4A90E2;
-  --highlight-row: #EAE4D6;
-  --highlight-same: #C3D9F5;
-  --error-bg: #FADBD8;
-  --error-txt: #E74C3C;
+  --bg-color: #FDF8E8;       /* Cream */
+  --primary-color: #1E293B;  /* Navy */
+  --accent-color: #F1C40F;   /* Kuning/Emas */
+  --text-color: #0F172A;
+  --highlight-row: #E2E8F0;
+  --highlight-same: #CBD5E1;
+  --error-color: #EF4444;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+/* RESET DASAR */
+* {
+  box-sizing: border-box;
+}
 
 body {
-    margin: 0; padding: 0;
-    width: 100vw; height: 100vh;
-    background-color: #f0f0f0; /* Background luar container HP */
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    color: var(--navy);
-    overflow: hidden; /* Mencegah scroll body */
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #e5e5e5; /* Background luar HP */
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-/* --- CONTAINER UTAMA (HP FRAME) --- */
+/* --- CONTAINER UTAMA --- */
+/* Ini kotak HP-nya. Ukurannya tetap, tidak akan berubah-ubah aneh */
 .main-container {
-  width: 100%; 
-  max-width: 420px; /* Lebar Konsisten untuk SEMUA halaman */
-  height: 100vh;    /* Tinggi Full Layar HP */
-  background-color: var(--bg-cream); 
-  display: flex; 
-  flex-direction: column; 
+  width: 100%;
+  max-width: 420px;       /* Lebar standar HP */
+  background-color: var(--bg-color);
+  min-height: 100vh;      /* Minimal setinggi layar */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
   position: relative;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  overflow: hidden;
-  padding: 15px; /* Padding aman pinggir */
+  margin: 0 auto;         /* Tengah horizontal */
 }
 
-/* --- TATA LETAK HOME (TENGAH) --- */
+/* --- TAMPILAN HOME (Spesifik: Tengah) --- */
 .home-layout {
-    justify-content: center; /* Vertikal Tengah */
-    align-items: center;     /* Horizontal Tengah */
-    gap: 30px;
+  justify-content: center; /* Konten di tengah vertikal */
+  align-items: center;     /* Konten di tengah horizontal */
+  text-align: center;
 }
 
-.home-title { 
-    font-family: 'Patrick Hand', cursive; 
-    font-size: 3rem; 
-    margin: 0; 
-    color: var(--navy); 
+.home-title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
 }
 
-.hero-box { 
-    width: 100%; 
-    border-radius: 20px; 
-    overflow: hidden; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+.hero-box {
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.hero-img { width: 100%; display: block; }
-
-.play-btn-large { 
-    width: 100%; padding: 15px; 
-    border-radius: 50px; 
-    background: var(--navy); color: white; 
-    border: none; font-size: 1.2rem; font-weight: bold; 
-    cursor: pointer; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+.hero-img {
+  width: 100%;
+  display: block;
 }
-.play-btn-large:active { transform: scale(0.98); }
 
-/* --- TATA LETAK GAME (RAPI) --- */
+.play-btn-large {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 15px 50px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #0f172a;
+  transition: transform 0.1s;
+}
+
+.play-btn-large:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+/* --- TAMPILAN GAME (Spesifik: Atas ke Bawah) --- */
 .game-layout {
-    /* Kita pakai flex-start tapi dengan spacer biar rapi */
-    justify-content: flex-start;
-    padding-top: 10px;
-    padding-bottom: 20px;
+  justify-content: flex-start; /* Mulai dari atas */
 }
 
-/* 1. Header (Back & Judul) */
-.game-header-row { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    width: 100%;
-    margin-bottom: 10px;
-    height: 50px; /* Tinggi pasti biar ga goyang */
+/* 1. HEADER (Back & Info) */
+.game-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
-.icon-btn { 
-    background: none; border: none; color: var(--navy); 
-    padding: 8px; border-radius: 50%; cursor: pointer; 
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.header-info { text-align: center; }
-.level-title { margin: 0; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; }
-.score-text { font-size: 0.9rem; font-weight: 600; opacity: 0.8; }
-
-/* 2. Status Row (Mistake & Timer) */
-.status-row { 
-    display: flex; 
-    justify-content: space-between; 
-    width: 100%;
-    font-weight: 700; 
-    font-size: 0.95rem;
-    margin-bottom: 5px; /* Jarak dikit ke papan */
-    padding: 0 5px;
+.header-info {
+  text-align: center;
+  flex-grow: 1; /* Ambil ruang tengah */
 }
 
-/* 3. Papan Sudoku */
-.board-wrapper { 
-    width: 100%; 
-    display: flex; 
-    justify-content: center;
-    margin-bottom: 15px; /* Jarak ke controls */
+.level-title {
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  line-height: 1;
+}
+
+.score-text {
+  font-size: 0.9rem;
+  color: #64748B;
+}
+
+/* 2. STATUS (Mistake & Timer) */
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--primary-color);
+  padding: 0 5px;
+}
+
+/* 3. PAPAN SUDOKU (Grid) */
+.board-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .grid {
-    width: 100%; 
-    aspect-ratio: 1/1; 
-    display: grid; 
-    grid-template-columns: repeat(9, 1fr);
-    background: var(--navy);
-    border: 2px solid var(--navy); 
-    gap: 1px; 
-    border-radius: 8px; 
-    overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: var(--primary-color); /* Warna Garis Grid */
+  border: 2px solid var(--primary-color); /* Border Luar Tebal */
+  gap: 1px;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1; /* Pastikan Kotak Sempurna */
 }
 
-.cell { 
-    background: #fff; 
-    display: flex; align-items: center; justify-content: center; 
-    font-size: clamp(16px, 5vw, 24px); /* Responsive Font */
-    cursor: pointer; 
+.cell {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
 }
-/* Garis Tebal Sudoku */
-.cell:nth-child(3n) { border-right: 2px solid var(--navy); }
+
+/* Garis Tebal 3x3 */
+.cell:nth-child(3n) { border-right: 2px solid var(--primary-color); }
 .cell:nth-child(9n) { border-right: none; }
 .grid .cell:nth-child(n+19):nth-child(-n+27), 
-.grid .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--navy); }
+.grid .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--primary-color); }
 
-/* 4. Controls (Cancel, Hint, Numpad) */
-.controls-section { 
-    width: 100%; 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: auto; /* Dorong ke bawah jika layar panjang, tapi tetap nempel kalau pendek */
-}
-
-.tools { 
-    display: flex; 
-    justify-content: center; 
-    gap: 40px; 
-}
-
-.tool-btn { 
-    background: none; border: none; color: var(--navy); 
-    display: flex; flex-direction: column; align-items: center; 
-    font-size: 0.85rem; font-weight: 600; cursor: pointer;
-}
-
-.tool-icon { 
-    font-size: 1.8rem; /* Ukuran Emoji Hint */
-    margin-bottom: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; height: 40px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.badge { 
-    position: absolute; top: -5px; right: -5px;
-    background: var(--navy); color: white; 
-    font-size: 0.7rem; padding: 2px 6px; border-radius: 10px;
-}
-
-.numpad { 
-    display: flex; 
-    justify-content: space-between; 
-    gap: 5px; 
-    width: 100%; 
-}
-
-.num-btn { 
-    flex: 1; aspect-ratio: 1/1.2; /* Sedikit persegi panjang ke atas */
-    background: var(--navy); color: white; 
-    border: none; border-radius: 8px; 
-    font-size: 1.4rem; font-weight: 700; 
-    cursor: pointer; 
-    box-shadow: 0 4px 0 var(--navy-light);
-}
-.num-btn:active { transform: translateY(4px); box-shadow: none; }
-
-/* Footer Link */
-.footer-link { 
-    text-align: center; margin-top: 10px; 
-    text-decoration: none; color: var(--navy); opacity: 0.5; font-size: 0.8rem; 
-}
-
-/* --- COLORS --- */
-.c-initial { color: black; font-weight: 700; background: #fafafa; }
-.c-user { color: var(--blue-highlight); font-weight: 600; }
-.c-selected { background-color: var(--navy) !important; color: white !important; }
+/* Warna Cell */
+.c-initial { color: black; font-weight: 700; background-color: #f8f9fa; }
+.c-user { color: #3b82f6; } /* Biru angka user */
+.c-selected { background-color: var(--primary-color) !important; color: white !important; }
 .c-highlight { background-color: var(--highlight-row); }
 .c-same { background-color: var(--highlight-same); }
-.c-err { background-color: var(--error-bg) !important; color: var(--error-txt) !important; }
+.c-err { background-color: var(--error-color) !important; color: white !important; }
 
-/* --- MODALS --- */
-.splash-container { position: fixed; inset: 0; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-.splash-logo-animated { width: 150px; animation: pulse 1.5s infinite alternate; }
-@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(2px); }
-.modal-card { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
-.modal-btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-.btn-primary.modal-btn { background: var(--navy); color: white; padding: 12px; border-radius: 50px; border: none; font-weight: bold; }
-
-/* WIN SCREEN */
-.win-card-container { background: white; border-radius: 20px; width: 85%; max-width: 320px; overflow: hidden; text-align: center; }
-.win-card-header { background: var(--navy); padding: 20px; color: white; }
-.win-buttons { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-.stat-row { display: flex; justify-content: space-between; padding: 5px 20px; border-bottom: 1px solid #eee; }
-
-/* FIX UNTUK LAYAR DESTOP */
-@media (min-width: 480px) {
-    .main-container {
-        border-radius: 30px;
-        height: 90vh; /* Tidak full height di PC biar keliatan kayak HP */
-        border: 8px solid #333; /* Frame HP */
-    }
+/* 4. CONTROLS (Tombol Bawah) */
+.controls-section {
+  width: 100%;
+  margin-top: auto; /* Dorong ke bawah jika ada sisa ruang */
 }
+
+.tools {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.tool-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 0 #cbd5e1;
+}
+
+.tool-btn:active { transform: translateY(2px); box-shadow: none; }
+
+.tool-icon {
+  font-size: 1.5rem; /* Ukuran Emoji */
+  margin-bottom: 2px;
+  position: relative; /* Penting buat badge */
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 10px;
+}
+
+.numpad {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.num-btn {
+  flex: 1;
+  aspect-ratio: 1;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #0f172a;
+}
+
+.num-btn:active { transform: translateY(4px); box-shadow: none; }
+
+/* 5. FOOTER */
+.footer-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+/* --- MODALS (Popup) --- */
+.splash-container {
+  position: fixed; inset: 0;
+  background-color: var(--bg-color);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999;
+}
+.splash-logo-animated { width: 150px; }
+
+.modal-overlay {
+  position: fixed; inset: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+
+.modal-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 85%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-title { margin-top: 0; color: var(--primary-color); }
+.modal-btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+
+.btn-primary.modal-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Win Card */
+.win-card-container {
+  background: white;
+  border-radius: 15px;
+  width: 85%;
+  max-width: 300px;
+  overflow: hidden;
+}
+.win-card-header { background: var(--primary-color); color: white; padding: 20px; text-align: center; }
+.win-buttons { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.stat-row { display: flex; justify-content: space-between; padding: 5px 20px; font-weight: 600; color: #333; }
