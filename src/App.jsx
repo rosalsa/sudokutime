@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// --- LOGIC SUDOKU (TIDAK BERUBAH) ---
+// --- LOGIC SUDOKU ---
 const getEmptyBoard = () => Array(81).fill(0);
 const isSafe = (board, row, col, num) => {
   for (let x = 0; x < 9; x++) if (board[row * 9 + x] === num) return false;
@@ -39,7 +39,7 @@ const generate = (level) => {
 };
 
 const IMG_HERO = "/banner.png"; 
-const IMG_LOGO = "/logo.png"; // Pastikan ada logo.png
+const IMG_LOGO = "/logo.png";
 
 const Footer = () => (
   <a href="https://www.instagram.com/rosaliasalsabila_/" target="_blank" rel="noreferrer" className="footer-link">
@@ -57,7 +57,6 @@ function App() {
   const [view, setView] = useState('splash'); 
   const [showLevelModal, setShowLevelModal] = useState(false);
   
-  // Game State
   const [level, setLevel] = useState('Easy');
   const [initBoard, setInitBoard] = useState([]);
   const [board, setBoard] = useState([]);
@@ -68,14 +67,11 @@ function App() {
   const [hist, setHist] = useState([]);
   const [timer, setTimer] = useState(0);
   
-  // Modal States
   const [isPaused, setIsPaused] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
-  
   const [sel, setSel] = useState(null);
 
-  // SPLASH SCREEN TIMER
   useEffect(() => {
     if (view === 'splash') {
       const t = setTimeout(() => setView('home'), 2800);
@@ -83,7 +79,6 @@ function App() {
     }
   }, [view]);
 
-  // Timer Logic
   useEffect(() => {
     let t;
     if (view === 'game' && !isPaused && !isGameOver && !isWin && !showLevelModal) {
@@ -148,14 +143,12 @@ function App() {
     return classes;
   };
 
-  // --- RENDER SPLASH ---
   if (view === 'splash') return (
     <div className="splash-container">
       <img src={IMG_LOGO} alt="Logo" className="splash-logo-animated" />
     </div>
   );
 
-  // --- RENDER HOME ---
   if (view === 'home') return (
     <div className="main-container home-layout">
       <h1 className="home-title">SUDOKUTIME</h1>
@@ -180,71 +173,66 @@ function App() {
     </div>
   );
 
-  // --- RENDER GAME (STRUKTUR BARU) ---
+  // --- GAME LAYOUT PERBAIKAN ---
   return (
     <div className="main-container game-layout">
       
-      {/* 1. TOP BAR: Hanya Tombol Back */}
-      <div className="top-bar">
+      {/* 1. Tombol Back Sendirian */}
+      <div className="header-top-left">
         <button className="icon-btn back-btn" onClick={() => setIsPaused(true)}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10c3 3 3 9 3 9"/></svg>
         </button>
       </div>
 
-      {/* 2. GAME CONTENT WRAPPER (Untuk Layout Desktop Kiri-Kanan) */}
-      <div className="game-content-wrapper">
-        
-        {/* KIRI: AREA PAPAN */}
-        <div className="board-section">
-            {/* Header Info (Level & Score) */}
-            <div className="info-header">
-                <h2 className="level-label">{level}</h2>
-                <div className="score-label">Skors : {score}</div>
-            </div>
+      {/* 2. Judul Level & Score di Tengah (Baris Sendiri) */}
+      <div className="header-center-info">
+        <h2 className="level-label">{level}</h2>
+        <div className="score-label">Skors : {score}</div>
+      </div>
 
-            {/* Info Bar (Mistake & Time) -> DI ATAS BOARD */}
-            <div className="status-bar">
-                <span>Mistake: {mistake}/5</span>
-                <span className="timer-text">{fmtTime(timer)}</span>
-            </div>
+      {/* 3. Baris Mistake & Time (PERSIS DI ATAS BOARD) */}
+      <div className="status-bar-wrapper">
+          <span>Mistake: {mistake}/5</span>
+          {/* Teks Logic 9 diganti Time sesuai request */}
+          <span className="timer-text">{fmtTime(timer)}</span>
+      </div>
 
-            {/* Grid Sudoku */}
-            <div className="board-wrapper">
-                <div className="grid">
-                {board.map((val, idx) => (
-                    <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
-                    {val !== 0 ? val : ''}
-                    </div>
-                ))}
+      {/* 4. Board */}
+      <div className="board-wrapper">
+        <div className="grid">
+        {board.map((val, idx) => (
+            <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
+            {val !== 0 ? val : ''}
+            </div>
+        ))}
+        </div>
+      </div>
+
+      {/* 5. Controls (PERSIS DI BAWAH BOARD) */}
+      <div className="controls-section">
+        <div className="tools">
+            <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
+                <div className="tool-icon">↺</div>
+                <span>Cancel</span>
+            </button>
+            <button className="tool-btn" onClick={hint}>
+                <div className="tool-icon" style={{position:'relative'}}>
+                    💡 <span className="badge">{hints}</span>
                 </div>
-            </div>
+                <span>Hint</span>
+            </button>
         </div>
-
-        {/* KANAN: AREA KONTROL (Di Desktop pindah ke samping, Di HP di bawah) */}
-        <div className="controls-section">
-            <div className="tools">
-                <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
-                    <div className="tool-icon">↺</div>
-                    <span>Cancel</span>
-                </button>
-                <button className="tool-btn" onClick={hint}>
-                    <div className="tool-icon" style={{position:'relative'}}>
-                        💡 <span className="badge">{hints}</span>
-                    </div>
-                    <span>Hint</span>
-                </button>
-            </div>
-            
-            <div className="numpad">
-                {[1,2,3,4,5,6,7,8,9].map(n => (
-                    <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
-                ))}
-            </div>
+        
+        <div className="numpad">
+            {[1,2,3,4,5,6,7,8,9].map(n => (
+                <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
+            ))}
         </div>
-
-      </div> {/* End Game Content Wrapper */}
+      </div>
       
-      <Footer />
+      <div style={{marginTop:'auto'}}>
+          <Footer />
+      </div>
 
       {/* --- MODALS --- */}
       {isPaused && (
