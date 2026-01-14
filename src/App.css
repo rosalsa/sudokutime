@@ -13,102 +13,121 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
-/* =========================================
-   1. STYLE MOBILE (DEFAULT)
-   Fokus: Anti-Scroll, Full Screen, Compact
-   ========================================= */
-
+/* RESET BODY */
 html, body {
     margin: 0; padding: 0;
-    width: 100%; 
-    height: 100dvh; /* Tinggi dinamis HP */
+    width: 100%; height: 100%;
     background-color: var(--bg-cream);
-    overflow: hidden; /* Kunci scroll di HP */
+    overflow-x: hidden; /* Mencegah scroll samping di HP */
 }
 
 body {
-    /* Teknik KUNCI LAYAR di HP agar tidak goyang saat keyboard muncul */
-    position: fixed; 
-    inset: 0;
     font-family: 'Poppins', sans-serif;
     color: var(--navy);
     display: flex; justify-content: center;
+    /* Di HP position fixed untuk cegah scroll mental, di PC nanti dilepas */
+    position: fixed; inset: 0; 
 }
 
-/* Container Utama Mobile */
+/* CONTAINER UTAMA (MOBILE FIRST) */
 .main-container {
   width: 100%; 
-  max-width: 450px; 
-  height: 100%; /* Full layar HP */
+  max-width: 480px; /* Lebar HP */
+  height: 100%;
   display: flex; flex-direction: column; 
-  padding: 16px;
+  padding: 15px;
   background-color: var(--bg-cream); 
   margin: 0 auto;
   position: relative;
 }
 
-/* --- ELEMENT UMUM --- */
+/* --- HOME SCREEN --- */
 .home-layout { justify-content: center; align-items: center; gap: 20px; }
 .home-title { font-family: 'Patrick Hand', cursive; font-size: 3rem; margin: 0; color: var(--navy); text-align: center; }
-
-.hero-box { 
-    width: 100%; aspect-ratio: 16/9; 
-    border-radius: 20px; overflow: hidden; 
-    background: #ddd; position: relative;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
+.hero-box { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; background: #ddd; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
 .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.play-btn-large { width: 80%; padding: 15px; border-radius: 50px; background: var(--navy); color: white; border: none; font-size: 1.4rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-.play-btn-large {
-    width: 80%; padding: 15px; border-radius: 50px;
-    background: var(--navy); color: white; border: none;
-    font-size: 1.4rem; font-weight: bold; cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+/* --- GAME LAYOUT (VERTICAL MOBILE) --- */
+.game-layout { display: flex; flex-direction: column; height: 100%; }
+
+.top-bar { display: flex; align-items: flex-start; margin-bottom: 5px; height: 40px; }
+.icon-btn { background: none; border: none; color: var(--navy); cursor: pointer; padding: 0; }
+
+.game-content-wrapper {
+    display: flex; flex-direction: column; /* Default HP: Atas Bawah */
+    flex: 1; /* Isi sisa ruang */
+    width: 100%;
+    overflow: hidden;
 }
-.play-btn-large:active { transform: scale(0.98); }
 
-/* --- GAME LAYOUT --- */
-.game-layout { display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
+/* BAGIAN PAPAN & INFO */
+.board-section {
+    display: flex; flex-direction: column;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+}
 
-.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-shrink: 0; height: 40px; }
-.icon-btn { background: none; border: none; color: var(--navy); cursor: pointer; }
-.header-center { text-align: center; }
-.level-label { margin: 0; font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
-.score-label { font-size: 0.9rem; font-weight: 600; }
-.timer { font-family: monospace; font-size: 1.1rem; font-weight: 700; width: 50px; text-align: right; }
-.mistake-info { font-size: 0.85rem; font-weight: 600; opacity: 0.7; margin-bottom: 5px; flex-shrink: 0; display: flex; justify-content: space-between; }
+.info-header { text-align: center; margin-bottom: 5px; }
+.level-label { margin: 0; font-size: 1.5rem; font-weight: 700; }
+.score-label { font-size: 1rem; font-weight: 600; }
 
-/* BOARD WRAPPER (Area Tengah) */
-.board-wrapper { 
-    flex: 1; /* Isi ruang sisa */
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; overflow: hidden; 
+.status-bar { 
+    display: flex; justify-content: space-between; 
+    font-size: 0.9rem; font-weight: 700; 
+    margin-bottom: 5px; padding: 0 5px;
+}
+.timer-text { font-family: monospace; font-size: 1.1rem; }
+
+.board-wrapper {
+    width: 100%;
+    display: flex; justify-content: center; align-items: center;
     padding: 5px 0;
 }
 
-/* GRID SUDOKU */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    display: grid; grid-template-columns: repeat(9, 1fr);
     border: 2px solid var(--navy); background: var(--navy);
     gap: 1px; border-radius: 6px; overflow: hidden;
-    width: 100%; max-width: 100%; 
-    /* Agar tidak gepeng, kita biarkan dia menjaga rasio */
-    aspect-ratio: 1/1; 
-    /* Tapi jangan melebihi tinggi layar yang tersedia */
-    max-height: 100%; 
+    width: 100%; aspect-ratio: 1/1; /* Selalu Kotak */
+    max-height: 55vh; /* Batas tinggi di HP agar muat tombol */
 }
 
-.cell { 
-    background: #fff; display: flex; align-items: center; justify-content: center; 
-    font-size: clamp(12px, 5cqw, 24px); cursor: pointer; 
-}
+.cell { background: #fff; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 5vw, 24px); cursor: pointer; }
 .cell:nth-child(3n) { border-right: 2px solid var(--navy); }
 .cell:nth-child(9n) { border-right: none; }
-.grid .cell:nth-child(n+19):nth-child(-n+27),
-.grid .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--navy); }
+.grid .cell:nth-child(n+19):nth-child(-n+27), .grid .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--navy); }
 
-/* WARNA CELL */
+/* BAGIAN KONTROL */
+.controls-section {
+    margin-top: auto; padding-top: 10px;
+}
+.tools { display: flex; justify-content: center; gap: 40px; margin-bottom: 15px; }
+.tool-btn { background: none; border: none; color: var(--navy); font-weight: 600; display: flex; flex-direction: column; align-items: center; font-size: 0.9rem; }
+.tool-icon { font-size: 1.8rem; margin-bottom: 2px; }
+.badge { font-size: 0.7rem; background: var(--navy); color: white; border-radius: 50%; padding: 2px 6px; position: absolute; top: -5px; right: -8px; }
+
+.numpad { display: flex; gap: 5px; width: 100%; height: 55px; }
+.num-btn { flex: 1; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 1.5rem; font-weight: 700; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+.num-btn:active { transform: translateY(4px); box-shadow: none; }
+
+/* FOOTER */
+.footer-link { text-decoration: none; color: var(--navy); font-weight: bold; font-size: 0.75rem; margin-top: 10px; opacity: 0.6; text-align: center; display: block; flex-shrink: 0; }
+
+/* MODALS & SPLASH (Standard) */
+.splash-container { position: fixed; inset: 0; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.splash-logo-animated { width: 60%; max-width: 300px; animation: splashSequence 2.8s ease-in-out forwards; }
+@keyframes splashSequence { 0% {opacity:0; transform:scale(0.8) translateY(20px)} 20% {opacity:1; transform:scale(1)} 80% {opacity:1} 100% {opacity:0; transform:scale(1.1) translateY(-30px)} }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); }
+.modal-card { background: var(--bg-cream); padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; border: 3px solid var(--navy); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.win-card-header { background: var(--navy); color: white; padding: 25px; border-radius: 25px; margin-bottom: 15px; }
+.stars-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.win-stats { display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 1rem; }
+.stat-row { display: flex; justify-content: space-between; padding: 0 30px; }
+.modal-btn-group, .win-buttons { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 15px; }
+.btn-primary.modal-btn { width: 100%; padding: 12px; background: var(--navy); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1rem; margin: 0; }
 .c-initial { color: black; font-weight: 700; background: #fafafa; }
 .c-user { color: var(--blue-highlight); font-weight: 500; }
 .c-selected { background-color: var(--blue-highlight) !important; color: white !important; }
@@ -116,80 +135,71 @@ body {
 .c-same { background-color: var(--highlight-same); }
 .c-err { background-color: var(--error-bg) !important; color: var(--error-txt) !important; }
 
-/* CONTROLS */
-.controls-area { flex-shrink: 0; margin-top: auto; padding-bottom: 5px; }
-.tools { display: flex; justify-content: space-around; margin-bottom: 10px; }
-.tool-btn { background: none; border: none; color: var(--navy); font-weight: 600; display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; }
-.tool-icon { font-size: 1.5rem; margin-bottom: 2px; }
-.badge { font-size: 0.6rem; background: var(--navy); color: white; border-radius: 50%; padding: 2px 5px; position: absolute; top: -5px; right: -8px; }
-
-.numpad { display: flex; gap: 4px; width: 100%; height: 45px; }
-.num-btn { flex: 1; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 1.3rem; font-weight: 700; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
-.num-btn:active { transform: translateY(3px); box-shadow: none; }
-
-/* MODALS */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); }
-.modal-card { background: var(--bg-cream); padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; border: 3px solid var(--navy); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-.modal-title { margin-top: 0; color: var(--navy); font-weight: 800; font-size: 1.6rem; }
-.modal-desc { font-weight: 600; margin-bottom: 20px; color: var(--navy); font-size: 0.95rem; }
-.modal-btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-.btn-primary.modal-btn { width: 100%; padding: 10px; background: var(--navy); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1rem; cursor: pointer; margin: 0; }
-.error-border { border-color: var(--navy); }
-
-/* WIN SCREEN */
-.win-card-container { width: 90%; max-width: 320px; text-align: center; }
-.win-card-header { background: var(--navy); color: white; padding: 25px 20px 35px 20px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); margin-bottom: 20px; }
-.stars-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
-.win-title { font-size: 2.2rem; margin: 10px 0 20px 0; font-weight: 800; }
-.win-stats { display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 1rem; }
-.stat-row { display: flex; justify-content: space-between; padding: 0 30px; }
-.win-buttons { display: flex; flex-direction: column; gap: 12px; padding: 0 30px; }
-
-.footer-link { text-decoration: none; color: var(--navy); font-weight: bold; font-size: 0.75rem; margin-top: 5px; opacity: 0.6; text-align: center; display: block; flex-shrink: 0; }
-.footer-link:hover { text-decoration: underline; opacity: 1; }
-
-/* SPLASH SCREEN ANIMATION */
-.splash-container { position: fixed; inset: 0; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-.splash-logo-animated { width: 60%; max-width: 250px; animation: splashSequence 2.8s ease-in-out forwards; }
-@keyframes splashSequence {
-    0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-    20% { opacity: 1; transform: scale(1); }
-    80% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(1.1) translateY(-30px); }
-}
-
-
-/* =========================================
-   2. STYLE DESKTOP / KOMPUTER (FIX GEPENG)
-   Fokus: Tampilan Cantik, Tidak Gepeng, Scrollable
-   ========================================= */
-
-@media (min-width: 768px) {
-    /* LEPAS KUNCI LAYAR: Biarkan body scroll normal di PC */
+/* =========================================================
+   STYLE DESKTOP (MELEBAR KE SAMPING / LANDSCAPE)
+   Fokus: Layout Kiri-Kanan agar tidak gepeng
+   ========================================================= */
+@media (min-width: 850px) {
     body {
-        position: relative; 
-        overflow: auto; /* Boleh scroll jika layar pendek */
-        padding: 40px 0; /* Beri jarak atas bawah */
-        height: auto;
-        min-height: 100vh;
+        position: relative; overflow: auto; height: 100vh;
         align-items: center;
     }
 
-    /* CONTAINER CANTIK SEPERTI HP DI TENGAH LAYAR */
     .main-container {
-        /* Ukuran tetap agar tidak gepeng */
-        height: 850px; /* Tinggi ideal HP */
-        width: 420px;  /* Lebar ideal HP */
-        
-        /* Cegah gepeng jika layar monitor pendek */
-        min-height: 700px; 
-        
-        /* Kosmetik Desktop */
-        border-radius: 40px;
-        box-shadow: 0 20px 60px rgba(16, 44, 68, 0.25); /* Shadow Navy */
-        border: 8px solid #fff; /* Efek bezel HP */
+        max-width: 1000px; /* Lebarkan container */
+        width: 90%;
+        height: auto;
+        min-height: 600px;
+        aspect-ratio: 16/9; /* Rasio Laptop */
+        border: 8px solid #fff;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        justify-content: center;
     }
 
-    /* Logo Splash lebih besar */
-    .splash-logo-animated { max-width: 400px; }
+    .game-content-wrapper {
+        flex-direction: row; /* Ubah jadi Kiri-Kanan */
+        gap: 50px;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    /* KIRI: BOARD LEBIH BESAR */
+    .board-section {
+        flex: 0 0 auto; /* Jangan melar sembarangan */
+        width: 50%;
+    }
+    
+    .grid {
+        max-height: none; /* Lepas batas tinggi HP */
+        width: 100%;
+        max-width: 500px; /* Batasi biar gak raksasa */
+    }
+
+    /* KANAN: KONTROL DI SAMPING */
+    .controls-section {
+        width: 35%;
+        margin-top: 0; /* Hapus margin auto */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    /* Numpad jadi Grid 3x3 di Desktop biar cantik, atau tetap baris tapi besar */
+    .numpad {
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Kotak 3x3 */
+        gap: 10px;
+    }
+    .num-btn {
+        aspect-ratio: 1/1; /* Tombol jadi kotak */
+        font-size: 2rem;
+    }
+
+    /* Pindahkan Tools di atas Numpad */
+    .tools { gap: 20px; }
+    .tool-btn { flex-direction: row; gap: 10px; font-size: 1.2rem; }
 }
