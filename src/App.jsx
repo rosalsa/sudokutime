@@ -38,13 +38,13 @@ const generate = (level) => {
   return { initial, solved };
 };
 
+// URL GAMBAR
+const IMG_LOGO = "/logo.png";   
 const IMG_HERO = "/banner.png"; 
-const IMG_LOGO = "/logo.png";
+const INSTAGRAM_LINK = "https://www.instagram.com/rosaliasalsabila_/";
 
 const Footer = () => (
-  <a href="https://www.instagram.com/rosaliasalsabila_/" target="_blank" rel="noreferrer" className="footer-link">
-    by Rosalia Salsabila
-  </a>
+  <a href={INSTAGRAM_LINK} target="_blank" rel="noreferrer" className="footer-link">by Rosalia Salsabila</a>
 );
 
 const StarIcon = () => (
@@ -57,6 +57,7 @@ function App() {
   const [view, setView] = useState('splash'); 
   const [showLevelModal, setShowLevelModal] = useState(false);
   
+  // Game State
   const [level, setLevel] = useState('Easy');
   const [initBoard, setInitBoard] = useState([]);
   const [board, setBoard] = useState([]);
@@ -67,18 +68,22 @@ function App() {
   const [hist, setHist] = useState([]);
   const [timer, setTimer] = useState(0);
   
+  // Modals
   const [isPaused, setIsPaused] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
+  
   const [sel, setSel] = useState(null);
 
+  // Splash Timer
   useEffect(() => {
     if (view === 'splash') {
-      const t = setTimeout(() => setView('home'), 2800);
+      const t = setTimeout(() => setView('home'), 3000);
       return () => clearTimeout(t);
     }
   }, [view]);
 
+  // Game Timer
   useEffect(() => {
     let t;
     if (view === 'game' && !isPaused && !isGameOver && !isWin && !showLevelModal) {
@@ -98,12 +103,15 @@ function App() {
     setView('game');
   };
 
+  const handleNewGameClick = () => {
+    setShowLevelModal(true);
+  };
+
   const handleInput = (num) => {
     if (sel === null || isGameOver || isWin || board[sel] !== 0) return;
     if (solved[sel] === num) {
       const nb = [...board]; nb[sel] = num;
-      setBoard(nb); setHist([...hist, { i: sel, v: 0 }]);
-      setScore(s => s + 100);
+      setBoard(nb); setHist([...hist, { i: sel, v: 0 }]); setScore(s => s + 100);
       if (!nb.includes(0)) setIsWin(true);
     } else {
       const nb = [...board]; nb[sel] = num;
@@ -143,156 +151,150 @@ function App() {
     return classes;
   };
 
-  if (view === 'splash') return (
-    <div className="splash-container">
-      <img src={IMG_LOGO} alt="Logo" className="splash-logo-animated" />
-    </div>
-  );
-
-  if (view === 'home') return (
-    <div className="main-container home-layout">
-      <h1 className="home-title">SUDOKUTIME</h1>
-      <div className="hero-box">
-        <img src={IMG_HERO} alt="Banner" className="hero-img" onError={(e) => e.target.style.display='none'} />
-      </div>
-      <button className="btn-primary play-btn-large" onClick={() => setShowLevelModal(true)}>Play</button>
-      
-      {showLevelModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <h2 className="modal-title">Select Level</h2>
-            <div className="modal-btn-group">
-              <button className="btn-primary modal-btn" onClick={() => startGame('Easy')}>Easy</button>
-              <button className="btn-primary modal-btn" onClick={() => startGame('Medium')}>Medium</button>
-              <button className="btn-primary modal-btn" onClick={() => startGame('Hard')}>Hard</button>
-            </div>
-          </div>
-        </div>
-      )}
-      <Footer />
-    </div>
-  );
-
+  // ------------------------------------
+  // RENDER SEKARANG DIBUNGKUS SATU .main-container
+  // ------------------------------------
+  
   return (
-    <div className="main-container game-layout">
+    <div className="main-container">
       
-      {/* 1. Header Atas: Back kiri, Info Tengah */}
-      <div className="game-header-row">
-        <button className="icon-btn back-btn" onClick={() => setIsPaused(true)}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10c3 3 3 9 3 9"/></svg>
-        </button>
-        <div className="header-info">
-            <div className="level-title">{level}</div>
-            <div className="score-text">Skors : {score}</div>
+      {/* 1. SPLASH SCREEN (Overlay Absolute) */}
+      {view === 'splash' && (
+        <div className="splash-container">
+          <img src={IMG_LOGO} alt="Logic Nine" className="splash-logo-animated" />
         </div>
-        {/* Spacer kosong biar Info tetap di tengah */}
-        <div style={{width: 28}}></div>
-      </div>
+      )}
 
-      {/* 2. Baris Status: Mistake & Timer (Di atas Papan) */}
-      <div className="status-row">
-          <span>Mistake: {mistake}/5</span>
-          {/* LOGIC 9 diganti Timer */}
-          <span className="timer-display">{fmtTime(timer)}</span>
-      </div>
-
-      {/* 3. Papan Sudoku */}
-      <div className="board-wrapper">
-        <div className="grid">
-        {board.map((val, idx) => (
-            <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
-            {val !== 0 ? val : ''}
-            </div>
-        ))}
+      {/* 2. HOME SCREEN */}
+      {view === 'home' && (
+        <div className="home-layout" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column'}}>
+           <h1 className="home-title">SUDOKUTIME</h1>
+           <div className="hero-box">
+             <img src={IMG_HERO} alt="Banner" className="hero-img" onError={(e) => e.target.style.display='none'} />
+           </div>
+           <button className="btn-primary play-btn-large" onClick={() => setShowLevelModal(true)}>Play</button>
+           
+           {/* Modal Select Level (Home) */}
+           {showLevelModal && (
+             <div className="modal-overlay">
+               <div className="modal-card">
+                 <h2 className="modal-title">Select Level</h2>
+                 <div className="modal-btn-group">
+                   <button className="btn-primary modal-btn" onClick={() => startGame('Easy')}>Easy</button>
+                   <button className="btn-primary modal-btn" onClick={() => startGame('Medium')}>Medium</button>
+                   <button className="btn-primary modal-btn" onClick={() => startGame('Hard')}>Hard</button>
+                 </div>
+               </div>
+             </div>
+           )}
+           <Footer />
         </div>
-      </div>
+      )}
 
-      {/* 4. Kontrol (Undo, Hint, Angka) - Mepet ke Papan */}
-      <div className="controls-section">
-        <div className="tools">
-            <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
-                <div className="tool-icon">↺</div>
-                <span>Cancel</span>
-            </button>
-            <button className="tool-btn" onClick={hint}>
-                <div className="tool-icon" style={{position:'relative'}}>
-                    💡 <span className="badge">{hints}</span>
+      {/* 3. GAME SCREEN */}
+      {view === 'game' && (
+        <div className="game-layout" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column'}}>
+            <div className="game-header">
+                <button className="icon-btn" onClick={() => setIsPaused(true)}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10c3 3 3 9 3 9"/></svg>
+                </button>
+                <div className="header-center">
+                    <h2 className="level-label">{level}</h2>
+                    <div className="score-label">Skors : {score}</div>
                 </div>
-                <span>Hint</span>
-            </button>
-        </div>
-        
-        <div className="numpad">
-            {[1,2,3,4,5,6,7,8,9].map(n => (
-                <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
-            ))}
-        </div>
-      </div>
-      
-      {/* 5. Footer (Di Bawah) */}
-      <div style={{marginTop: '20px'}}>
-          <Footer />
-      </div>
-
-      {/* --- MODALS --- */}
-      {isPaused && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <h2 className="modal-title">Paused</h2>
-            <p className="modal-desc">are you sure you want to quit?</p>
-            <div className="modal-btn-group">
-                <button className="btn-primary modal-btn" onClick={() => { setIsPaused(false); setView('home'); }}>Yes</button>
-                <button className="btn-primary modal-btn" onClick={() => setIsPaused(false)}>No</button>
+                <div className="timer">{fmtTime(timer)}</div>
             </div>
-          </div>
-        </div>
-      )}
 
-      {isGameOver && (
-        <div className="modal-overlay">
-          <div className="modal-card error-border">
-            <h2 className="modal-title" style={{fontSize: '2rem'}}>Game Over</h2>
-            <p className="modal-desc">You lost because you made 5 mistakes.</p>
-            <div className="modal-btn-group">
-                <button className="btn-primary modal-btn" onClick={() => setView('home')}>Home</button>
-                <button className="btn-primary modal-btn" onClick={() => setShowLevelModal(true)}>New Game</button>
-            </div>
-          </div>
-        </div>
-      )}
+            <div className="mistake-info">Mistake: {mistake}/5 <span style={{float:'right'}}>Logic 9</span></div>
 
-      {isWin && (
-        <div className="modal-overlay">
-            <div className="win-card-container">
-                <div className="win-card-header">
-                    <div className="stars-container">
-                        <StarIcon /><StarIcon /><StarIcon />
+            <div className="board-wrapper">
+                <div className="grid">
+                {board.map((val, idx) => (
+                    <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
+                    {val !== 0 ? val : ''}
                     </div>
-                    <h2 className="win-title">Congrats!!!</h2>
-                    <div className="win-stats">
-                        <div className="stat-row"><span>Level</span><span>{level}</span></div>
-                        <div className="stat-row"><span>Times</span><span>{fmtTime(timer)}</span></div>
-                        <div className="stat-row"><span>Skors</span><span>{score}</span></div>
+                ))}
+                </div>
+            </div>
+
+            <div className="controls-area">
+                <div className="tools">
+                    <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
+                        <div className="tool-icon">↺</div> <span>Cancel</span>
+                    </button>
+                    <button className="tool-btn" onClick={hint}>
+                        <div className="tool-icon" style={{position:'relative'}}>💡 <span className="badge">{hints}</span></div> <span>Hint</span>
+                    </button>
+                </div>
+                <div className="numpad">
+                    {[1,2,3,4,5,6,7,8,9].map(n => (
+                        <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
+                    ))}
+                </div>
+            </div>
+
+            {/* MODALS */}
+            {isPaused && (
+                <div className="modal-overlay">
+                    <div className="modal-card">
+                        <h2 className="modal-title">Paused</h2>
+                        <p className="modal-desc">are you sure you want to quit?</p>
+                        <div className="modal-btn-group">
+                            <button className="btn-primary modal-btn" onClick={() => { setIsPaused(false); setView('home'); }}>Yes</button>
+                            <button className="btn-primary modal-btn" onClick={() => setIsPaused(false)}>No</button>
+                        </div>
                     </div>
                 </div>
-                <div className="win-buttons">
-                    <button className="btn-primary modal-btn" onClick={() => setShowLevelModal(true)}>New Game</button>
-                    <button className="btn-primary modal-btn" onClick={() => setView('home')}>Home</button>
+            )}
+            
+            {isGameOver && (
+                <div className="modal-overlay">
+                <div className="modal-card error-border">
+                    <h2 className="modal-title" style={{fontSize: '2rem'}}>Game Over</h2>
+                    <p className="modal-desc">You lost because you made 5 mistakes.</p>
+                    <div className="modal-btn-group">
+                        <button className="btn-primary modal-btn" onClick={() => setView('home')}>Home</button>
+                        <button className="btn-primary modal-btn" onClick={handleNewGameClick}>New Game</button>
+                    </div>
                 </div>
-            </div>
-        </div>
-      )}
+                </div>
+            )}
 
-      {showLevelModal && (
-        <div className="modal-overlay" style={{zIndex: 200}}>
-          <div className="modal-card">
-            <h2 className="modal-title">Select Level</h2>
-            <div className="modal-btn-group">
-              <button className="btn-primary modal-btn" onClick={() => startGame('Easy')}>Easy</button>
-              <button className="btn-primary modal-btn" onClick={() => startGame('Medium')}>Medium</button>
-              <button className="btn-primary modal-btn" onClick={() => startGame('Hard')}>Hard</button>
-            </div>
-          </div>
+            {isWin && (
+                <div className="modal-overlay">
+                    <div className="win-card-container">
+                        <div className="win-card-header">
+                            <div className="stars-container"><StarIcon /><StarIcon /><StarIcon /></div>
+                            <h2 className="win-title">Congrats!!!</h2>
+                            <div className="win-stats">
+                                <div className="stat-row"><span>Level</span><span>{level}</span></div>
+                                <div className="stat-row"><span>Times</span><span>{fmtTime(timer)}</span></div>
+                                <div className="stat-row"><span>Skors</span><span>{score}</span></div>
+                            </div>
+                        </div>
+                        <div className="win-buttons">
+                            <button className="btn-primary modal-btn" onClick={handleNewGameClick}>New Game</button>
+                            <button className="btn-primary modal-btn" onClick={() => setView('home')}>Home</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL LEVEL (Versi Game - Overlay) */}
+            {showLevelModal && (
+                <div className="modal-overlay" style={{zIndex: 200}}>
+                <div className="modal-card">
+                    <h2 className="modal-title">Select Level</h2>
+                    <div className="modal-btn-group">
+                    <button className="btn-primary modal-btn" onClick={() => startGame('Easy')}>Easy</button>
+                    <button className="btn-primary modal-btn" onClick={() => startGame('Medium')}>Medium</button>
+                    <button className="btn-primary modal-btn" onClick={() => startGame('Hard')}>Hard</button>
+                    </div>
+                </div>
+                </div>
+            )}
+            
+            <Footer />
         </div>
       )}
     </div>
