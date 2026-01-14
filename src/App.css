@@ -4,6 +4,7 @@
 :root {
   --bg-cream: #FFF8E7;
   --navy: #102C44;
+  --navy-light: #1a3c5a; /* Warna hover */
   --blue-highlight: #4A90E2;
   --highlight-row: #EAE4D6;
   --highlight-same: #C3D9F5;
@@ -13,110 +14,135 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
+/* 1. RESET LAYOUT */
 html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
     background-color: var(--bg-cream);
-    overflow-x: hidden;
 }
 
+/* 2. BODY UTAMA */
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--navy);
     display: flex; justify-content: center;
-    /* Default HP: Fixed agar tidak goyang */
-    position: fixed; inset: 0;
+    position: fixed; inset: 0; overflow: hidden;
 }
 
-/* CONTAINER UTAMA (MODE HP) */
+/* 3. CONTAINER APLIKASI */
 .main-container {
   width: 100%; 
   max-width: 450px; 
   height: 100%;
   display: flex; flex-direction: column; 
-  padding: 20px;
+  padding: 15px;
   background-color: var(--bg-cream); 
   margin: 0 auto;
   position: relative;
 }
 
-/* HOME SCREEN */
+/* --- HOME STYLE --- */
 .home-layout { justify-content: center; align-items: center; gap: 20px; }
 .home-title { font-family: 'Patrick Hand', cursive; font-size: 3rem; margin: 0; color: var(--navy); text-align: center; }
 .hero-box { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; background: #ddd; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
 .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.play-btn-large { width: 80%; padding: 15px; border-radius: 50px; background: var(--navy); color: white; border: none; font-size: 1.4rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-.play-btn-large:active { transform: scale(0.98); }
+
+/* TOMBOL PLAY (Interaktif) */
+.play-btn-large { 
+    width: 80%; padding: 15px; border-radius: 50px; 
+    background: var(--navy); color: white; border: none; 
+    font-size: 1.4rem; font-weight: bold; cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+    transition: all 0.2s ease; /* Animasi halus */
+}
+/* Efek Hover: Warna terang & Naik dikit */
+.play-btn-large:hover { background-color: var(--navy-light); transform: translateY(-3px); }
+/* Efek Klik: Mental ke dalam */
+.play-btn-large:active { transform: scale(0.95) translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
 /* --- GAME LAYOUT --- */
-.game-layout { 
-    display: flex; flex-direction: column; 
-    /* Gunakan gap kecil agar elemen rapat */
-    gap: 10px; 
-}
+.game-layout { justify-content: flex-start; }
 
-/* HEADER BAGIAN ATAS */
-.header-top-left {
-    display: flex; justify-content: flex-start;
-    height: 40px;
-}
-.icon-btn { background: none; border: none; color: var(--navy); cursor: pointer; padding: 0; }
+/* HEADER */
+.game-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 
-.header-center-info {
-    text-align: center;
-    margin-bottom: 5px;
+/* TOMBOL BACK (Interaktif) */
+.icon-btn { 
+    background: none; border: none; color: var(--navy); 
+    cursor: pointer; padding: 5px; 
+    border-radius: 50%; /* Biar hovernya bulat */
+    transition: all 0.2s ease;
 }
-.level-label { margin: 0; font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
-.score-label { font-size: 1rem; font-weight: 600; }
+.icon-btn:hover { background-color: rgba(16, 44, 68, 0.1); transform: scale(1.1); }
+.icon-btn:active { transform: scale(0.9); background-color: rgba(16, 44, 68, 0.2); }
 
-/* STATUS BAR (Mistake & Timer) */
-.status-bar-wrapper {
-    display: flex; justify-content: space-between;
-    font-size: 0.95rem; font-weight: 700;
-    padding: 0 5px;
-    margin-bottom: 5px; /* Jarak dikit ke board */
-}
-.timer-text { font-family: monospace; font-size: 1.1rem; }
+.header-info { text-align: center; }
+.level-title { margin: 0; font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.score-text { font-size: 1rem; font-weight: 600; }
+
+/* STATUS BAR */
+.status-row { display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 700; padding: 0 5px; margin-bottom: 5px; }
+.timer-display { font-family: monospace; font-size: 1.1rem; }
 
 /* BOARD WRAPPER */
-.board-wrapper {
-    width: 100%;
-    display: flex; justify-content: center;
-    /* Hilangkan flex-grow yang maksa melar */
-}
+.board-wrapper { width: 100%; display: flex; justify-content: center; margin-bottom: 10px; }
 
 /* GRID SUDOKU */
 .grid {
-    width: 100%;
-    /* Pastikan KOTAK SEMPURNA */
-    aspect-ratio: 1/1; 
-    
+    width: 100%; aspect-ratio: 1/1; 
     display: grid; grid-template-columns: repeat(9, 1fr);
     border: 2px solid var(--navy); background: var(--navy);
     gap: 1px; border-radius: 6px; overflow: hidden;
 }
-
-.cell { background: #fff; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 5vw, 24px); cursor: pointer; }
+.cell { background: #fff; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 5vw, 24px); cursor: pointer; transition: background 0.1s; }
+.cell:hover { background-color: #f0f8ff; } /* Efek hover di kotak */
+.cell:active { background-color: #e0e0e0; } 
 .cell:nth-child(3n) { border-right: 2px solid var(--navy); }
 .cell:nth-child(9n) { border-right: none; }
 .grid .cell:nth-child(n+19):nth-child(-n+27), .grid .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--navy); }
 
-/* CONTROLS (Langsung nempel bawah board) */
-.controls-section {
-    width: 100%;
-    margin-top: 5px; /* Jarak dikit dari board */
+/* CONTROLS */
+.controls-section { width: 100%; }
+.tools { display: flex; justify-content: center; gap: 40px; margin-bottom: 15px; }
+
+/* TOMBOL CANCEL & HINT (Interaktif) */
+.tool-btn { 
+    background: none; border: none; color: var(--navy); 
+    font-weight: 600; display: flex; flex-direction: column; align-items: center; 
+    font-size: 0.9rem; cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 10px; padding: 5px 10px;
 }
-.tools { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; }
-.tool-btn { background: none; border: none; color: var(--navy); font-weight: 600; display: flex; flex-direction: column; align-items: center; font-size: 0.9rem; }
+.tool-btn:hover { background-color: rgba(16, 44, 68, 0.05); transform: translateY(-3px); }
+.tool-btn:active { transform: scale(0.9); background-color: rgba(16, 44, 68, 0.1); }
+
 .tool-icon { font-size: 1.8rem; margin-bottom: 2px; }
 .badge { font-size: 0.7rem; background: var(--navy); color: white; border-radius: 50%; padding: 2px 6px; position: absolute; top: -5px; right: -8px; }
 
+/* NUMPAD (Interaktif) */
 .numpad { display: flex; gap: 5px; width: 100%; height: 50px; }
-.num-btn { flex: 1; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 1.5rem; font-weight: 700; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+.num-btn { 
+    flex: 1; background: var(--navy); color: white; 
+    border: none; border-radius: 8px; font-size: 1.5rem; font-weight: 700; 
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2); 
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+/* Efek Hover Angka: Jadi agak terang */
+.num-btn:hover { background-color: var(--navy-light); transform: translateY(-2px); box-shadow: 0 5px 0 rgba(0,0,0,0.2); }
+/* Efek Klik Angka: Mental */
 .num-btn:active { transform: translateY(3px); box-shadow: none; }
 
-/* Footer */
-.footer-link { text-decoration: none; color: var(--navy); font-weight: bold; font-size: 0.75rem; opacity: 0.6; text-align: center; display: block; margin-bottom: 5px; }
+/* FOOTER */
+.footer-link { text-decoration: none; color: var(--navy); font-weight: bold; font-size: 0.75rem; opacity: 0.6; text-align: center; display: block; margin-top: auto; }
+
+/* WARNA CELL */
+.c-initial { color: black; font-weight: 700; background: #fafafa; }
+.c-user { color: var(--blue-highlight); font-weight: 500; }
+.c-selected { background-color: var(--blue-highlight) !important; color: white !important; }
+.c-highlight { background-color: var(--highlight-row); }
+.c-same { background-color: var(--highlight-same); }
+.c-err { background-color: var(--error-bg) !important; color: var(--error-txt) !important; }
 
 /* MODALS */
 .splash-container { position: fixed; inset: 0; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; z-index: 9999; }
@@ -130,37 +156,43 @@ body {
 .win-stats { display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 1rem; }
 .stat-row { display: flex; justify-content: space-between; padding: 0 30px; }
 .modal-btn-group, .win-buttons { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 15px; }
-.btn-primary.modal-btn { width: 100%; padding: 12px; background: var(--navy); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1rem; margin: 0; }
-.c-initial { color: black; font-weight: 700; background: #fafafa; }
-.c-user { color: var(--blue-highlight); font-weight: 500; }
-.c-selected { background-color: var(--blue-highlight) !important; color: white !important; }
-.c-highlight { background-color: var(--highlight-row); }
-.c-same { background-color: var(--highlight-same); }
-.c-err { background-color: var(--error-bg) !important; color: var(--error-txt) !important; }
 
+/* TOMBOL DI DALAM MODAL (Easy, Medium, Hard, Home, New Game, Yes, No) */
+.btn-primary.modal-btn { 
+    width: 100%; padding: 12px; 
+    background: var(--navy); color: white; 
+    border: none; border-radius: 50px; 
+    font-weight: bold; font-size: 1rem; margin: 0; 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 5px rgba(0,0,0,0.2); /* Tambah shadow dikit */
+}
+/* Efek Hover Modal Btn */
+.btn-primary.modal-btn:hover { background-color: var(--navy-light); transform: translateY(-2px); }
+/* Efek Klik Modal Btn */
+.btn-primary.modal-btn:active { transform: scale(0.95); box-shadow: none; }
 
-/* =========================================
-   STYLE DESKTOP (AGAR TIDAK GEPENG & KEPOTONG)
-   ========================================= */
+.error-border { border-color: var(--navy); }
+
+/* ========================================================
+   FIX DESKTOP / LAPTOP (SCROLLABLE & ANTI-GEPENG)
+   ======================================================== */
 @media (min-width: 768px) {
     body {
         position: relative; 
-        overflow: auto; /* Izinkan scroll jika layar pendek */
-        padding: 40px 0;
+        overflow-y: auto; 
+        padding: 40px 0; 
         height: auto;
         min-height: 100vh;
-        align-items: center;
+        align-items: flex-start;
     }
 
     .main-container {
-        /* FIX UKURAN DESKTOP */
-        /* Tinggi Minimal agar Sudoku TIDAK KEPOTONG/GEPENG */
+        width: 450px; 
+        height: auto; 
         min-height: 850px; 
-        height: auto;
-        
-        width: 450px; /* Lebar tetap seperti HP */
-        border: 8px solid #fff;
         border-radius: 40px;
-        box-shadow: 0 20px 60px rgba(16, 44, 68, 0.2);
+        box-shadow: 0 20px 60px rgba(16, 44, 68, 0.25);
+        border: 8px solid #fff;
     }
 }
