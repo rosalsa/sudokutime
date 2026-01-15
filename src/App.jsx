@@ -176,7 +176,7 @@ function App() {
   return (
     <div className="main-container game-layout">
       
-      {/* 1. Header Atas: Back kiri, Info Tengah */}
+      {/* 1. Header Atas: Back kiri, Info Tengah - TETAP DI ATAS */}
       <div className="game-header-row">
         <button className="icon-btn back-btn" onClick={() => setIsPaused(true)}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10c3 3 3 9 3 9"/></svg>
@@ -185,54 +185,53 @@ function App() {
             <div className="level-title">{level}</div>
             <div className="score-text">Skors : {score}</div>
         </div>
-        {/* Spacer kosong biar Info tetap di tengah */}
         <div style={{width: 28}}></div>
       </div>
 
-      {/* 2. Baris Status: Mistake & Timer (Di atas Papan) */}
-      <div className="status-row">
-          <span>Mistake: {mistake}/5</span>
-          {/* LOGIC 9 diganti Timer */}
-          <span className="timer-display">{fmtTime(timer)}</span>
-      </div>
-
-      {/* 3. Papan Sudoku */}
-      <div className="board-wrapper">
-        <div className="grid">
-        {board.map((val, idx) => (
-            <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
-            {val !== 0 ? val : ''}
-            </div>
-        ))}
+      {/* WRAPPER TENGAH - Membuat Elemen Center Vertikal */}
+      <div className="game-center-wrapper">
+        {/* 2. Baris Status: Mistake & Timer */}
+        <div className="status-row">
+            <span>Mistake: {mistake}/5</span>
+            <span className="timer-display">{fmtTime(timer)}</span>
         </div>
-      </div>
 
-      {/* 4. Kontrol (Undo, Hint, Angka) - Mepet ke Papan */}
-      <div className="controls-section">
-        <div className="tools">
-            <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
-                <div className="tool-icon">↺</div>
-                <span>Cancel</span>
-            </button>
-            <button className="tool-btn" onClick={hint}>
-                <div className="tool-icon" style={{position:'relative'}}>
-                    💡 <span className="badge">{hints}</span>
-                </div>
-                <span>Hint</span>
-            </button>
+        {/* 3. Papan Sudoku */}
+        <div className="board-wrapper">
+          <div className="grid">
+          {board.map((val, idx) => (
+              <div key={idx} className={getCellClass(idx)} onClick={() => !isGameOver && !isWin && !isPaused && setSel(idx)}>
+              {val !== 0 ? val : ''}
+              </div>
+          ))}
+          </div>
         </div>
-        
-        <div className="numpad">
-            {[1,2,3,4,5,6,7,8,9].map(n => (
-                <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
-            ))}
+
+        {/* 4. Kontrol (Undo, Hint, Angka) */}
+        <div className="controls-section">
+          <div className="tools">
+              <button className="tool-btn" onClick={undo} style={{opacity: hist.length ? 1 : 0.5}}>
+                  <div className="tool-icon">↺</div>
+                  <span>Cancel</span>
+              </button>
+              <button className="tool-btn" onClick={hint}>
+                  <div className="tool-icon" style={{position:'relative'}}>
+                      💡 <span className="badge">{hints}</span>
+                  </div>
+                  <span>Hint</span>
+              </button>
+          </div>
+          
+          <div className="numpad">
+              {[1,2,3,4,5,6,7,8,9].map(n => (
+                  <button key={n} className="num-btn" onClick={() => handleInput(n)}>{n}</button>
+              ))}
+          </div>
         </div>
       </div>
       
-      {/* 5. Footer (Di Bawah) */}
-      <div style={{marginTop: '20px'}}>
-          <Footer />
-      </div>
+      {/* 5. Footer - TETAP DI BAWAH */}
+      <Footer />
 
       {/* --- MODALS --- */}
       {isPaused && (
